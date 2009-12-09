@@ -1,0 +1,37 @@
+.ui-flipbook { float: left; }
+
+.ui-flipbook-controls {
+    margin: 0; padding: 0.5em 1em; float: left; width: 12em;
+    border-width: 0 1px 0 0;
+}
+.ui-flipbook-status { height: 1.5em; line-height: 1.5em; padding: 0.2em; }
+.ui-flipbook-buttons { margin: 0.8em auto; width: 9em; }
+.ui-flipbook-buttons a:last-child { margin-right: 0; }
+.ui-flipbook-speed {
+    margin-top: 0.8em;
+    height: 5px;
+}
+.ui-flipbook-speed .ui-slider-handle {
+    height: 9px; width: 9px;
+    top: -3px; margin-left: -6px;
+}
+.ui-flipbook-loop { width: 9em; margin: 0.8em auto; float: none; }
+.ui-flipbook-loop .fg-button { display: block; float: none; width: 100%; margin: -1px 0 0; }
+.ui-flipbook-loop .ui-state-hover { z-index: 13; }
+.ui-flipbook-loop .ui-state-active { z-index: 17; }
+ul.ui-flipbook-indicators { list-style-type: none; clear: both; margin: 0; padding: 0; width: 100%; font-size: 1.2em; }
+ul.ui-flipbook-indicators li { float: left; color: green; margin: 0 0 0.2em; padding: 0 0.2em; }
+ul.ui-flipbook-indicators li.disabled { color: red; background: none !important; }
+ul.ui-flipbook-indicators li.active { background: #85B5D9; }
+
+.ui-flipbook-images {
+    position: relative; float: left;
+    border-width: 0 0 0 1px;
+    margin-left: -1px;
+    padding: 3px;
+}
+.ui-flipbook-images img { position: absolute; top: 3px; left: 3px; }
+
+.ui-flipbook-normal { color: #777777; text-shadow: 0 0 0 white; }
+.ui-flipbook-accent { color: #2E6E9E; text-shadow: 0 0 8px #E17009; }
+
