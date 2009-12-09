@@ -4,40 +4,44 @@
 jq.widget('ui.flipbook', {
 
     _init: function( ) {
-        var context = this.element[0];
+        var self = this,
+            o = this.options,
+            context = this.element[0];
 
         this.element
-        .addClass('ui-flipbook ui-widget ui-widget-content ui-corner-all ui-helper-clearfix')
-        .attr({role: 'flipbook'})
+        .addClass('ui-fb ui-widget ui-widget-content ui-corner-all ui-helper-clearfix')
+        .attr('role','flipbook')
         .append(
-            '<div class="ui-flipbook-controls ui-widget-content ui-corner-left">' +
-            '    <div class="ui-flipbook-status ui-widget-content ui-corner-all"></div>' +
-            '    <div class="ui-flipbook-buttons ui-helper-clearfix">' +
-            '        <a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" title="Prev"><span class="ui-icon ui-icon-seek-prev"></span>Prev</a>' +
-            '        <a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" title="Play"><span class="ui-icon ui-icon-play"></span>Play</a>' +
-            '        <a class="fg-button ui-state-default fg-button-icon-solo ui-corner-all" title="Next"><span class="ui-icon ui-icon-seek-next"></span>Next</a>' +
+            '<div class="ui-fb-controls ui-widget-content ui-corner-left">' +
+            '    <div class="ui-fb-status ui-widget-content ui-corner-all"></div>' +
+            '    <div class="ui-fb-buttons ui-helper-clearfix">' +
+            '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Prev"><span class="ui-icon ui-icon-seek-prev"></span>Prev</a>' +
+            '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Play"><span class="ui-icon ui-icon-play"></span>Play</a>' +
+            '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Next"><span class="ui-icon ui-icon-seek-next"></span>Next</a>' +
             '    </div>' +
-            '    <div class="ui-flipbook-speed"></div>' +
-            '    <div class="ui-flipbook-loop fg-buttonset fg-buttonset-single">' +
-            '        <button name="Forward" class="fg-button ui-state-default ui-priority-primary ui-corner-top ui-state-active">Forward</button>' +
-            '        <button name="Reverse" class="fg-button ui-state-default ui-priority-primary">Reverse</button>' +
-            '        <button name="Bounce" class="fg-button ui-state-default ui-priority-primary ui-corner-bottom">Bounce</button>' +
+            '    <div class="ui-fb-speed"></div>' +
+            '    <div class="ui-fb-loop ui-fb-buttonset ui-fb-buttonset-single">' +
+            '        <button name="Forward" class="ui-fb-button ui-state-default ui-priority-primary ui-corner-top ui-state-active">Forward</button>' +
+            '        <button name="Reverse" class="ui-fb-button ui-state-default ui-priority-primary">Reverse</button>' +
+            '        <button name="Bounce" class="ui-fb-button ui-state-default ui-priority-primary ui-corner-bottom">Bounce</button>' +
             '    </div>' +
-            '    <ul class="ui-flipbook-indicators ui-helper-clearfix"></ul>' +
+            '    <ul class="ui-fb-indicators ui-helper-clearfix"></ul>' +
             '</div>' +
-            '<div class="ui-flipbook-images ui-widget-content ui-corner-right" style="width:500px;height:375px;">' +
+            '<div class="ui-fb-images ui-widget-content ui-corner-right" style="width:500px;height:375px;">' +
             '</div>'
         );
 
         // slider for animation speed
-        jq('.ui-flipbook-speed', context).slider({
+        jq('.ui-fb-speed', context).slider({
             min: 1,
-            max: 100,
-            range: 'min'
+            max: this.options.maxFrameRate,
+            value: 8,
+            range: 'min',
+            change: function(event, ui) { self._delay(ui.value) }
         });
 
         // all hover and mousedown/up logic for buttons
-        jq('.fg-button:not(.ui-state-disabled)', context)
+        jq('.ui-fb-button:not(.ui-state-disabled)', context)
         .hover(
             function(){
                 jq(this).addClass('ui-state-hover');
@@ -47,12 +51,12 @@ jq.widget('ui.flipbook', {
             }
         )
         .mousedown(function(){
-                jq(this).parents('.fg-buttonset-single:first').find('.fg-button.ui-state-active').removeClass('ui-state-active');
-                if( jq(this).is('.ui-state-active.fg-button-toggleable, .fg-buttonset-multi .ui-state-active') ){ jq(this).removeClass('ui-state-active'); }
+                jq(this).parents('.ui-fb-buttonset-single:first').find('.ui-fb-button.ui-state-active').removeClass('ui-state-active');
+                if( jq(this).is('.ui-state-active.ui-fb-button-toggleable, .ui-fb-buttonset-multi .ui-state-active') ){ jq(this).removeClass('ui-state-active'); }
                 else { jq(this).addClass('ui-state-active'); }
         })
         .mouseup(function(){
-            if(! jq(this).is('.fg-button-toggleable, .fg-buttonset-single .fg-button,  .fg-buttonset-multi .fg-button') ){
+            if(! jq(this).is('.ui-fb-button-toggleable, .ui-fb-buttonset-single .ui-fb-button,  .ui-fb-buttonset-multi .ui-fb-button') ){
                 jq(this).removeClass('ui-state-active');
             }
         });
@@ -77,15 +81,33 @@ jq.widget('ui.flipbook', {
         jq('button[name=Bounce]', context).click(function() {
             console.log('bounce');
         });
-    }
+
+
+        this._delay(jq('.ui-fb-speed', context).slider('value'));
+    },
+
+    destroy: function() {
+        this.element
+        .removeClass('ui-fb ui-widget ui-widget-content ui-corner-all ui-helper-clearfix')
+        .removeAttr('role','flipbook')
+        .removeData('flipbook')
+        .empty();
+    },
+
+    _delay: function( frameRate ) {
+        this.delay = 1 / frameRate * 1000;
+    },
+
+    _next: function() { },
+    _prev: function() { }
 
 });
 
 jq.extend(jq.ui.flipbook, {
   version: '0.0.0',
   defaults: {
-    delay: 500,
-    planningTimes: [11, 13, 15]
+    images: [],
+    maxFrameRate: 24
   }
 });
 

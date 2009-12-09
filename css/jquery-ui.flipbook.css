@@ -1,37 +1,63 @@
-.ui-flipbook { float: left; }
 
-.ui-flipbook-controls {
+/* button styling taken from the Filament Group Lab webiste */
+/* http://www.filamentgroup.com/lab/styling_buttons_and_toolbars_with_the_jquery_ui_css_framework/ */
+.ui-fb-button { outline: 0; margin:0 4px 0 0; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
+.ui-fb-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }
+
+a.ui-fb-button { float:left; }
+
+/* remove extra button width in IE */
+button.ui-fb-button { width:auto; overflow:visible; }
+
+.ui-fb-button-icon-left { padding-left: 2.1em; }
+.ui-fb-button-icon-right { padding-right: 2.1em; }
+.ui-fb-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
+.ui-fb-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
+
+.ui-fb-button-icon-solo { display:block; width:8px; text-indent: -9999px; }    /* solo icon buttons must have block properties for the text-indent to work */
+
+.ui-fb-buttonset { float:left; }
+.ui-fb-buttonset .ui-fb-button { float: left; }
+.ui-fb-buttonset-single .ui-fb-button,
+.ui-fb-buttonset-multi .ui-fb-button { margin-right: -1px;}
+
+.ui-fb-toolbar { padding: .5em; margin: 0;  }
+.ui-fb-toolbar .ui-fb-buttonset { margin-right:1.5em; padding-left: 1px; }
+.ui-fb-toolbar .ui-fb-button { font-size: 1em;  }
+
+
+/* begin the flipbook styles */
+.ui-fb { float: left; }
+
+.ui-fb-controls {
     margin: 0; padding: 0.5em 1em; float: left; width: 12em;
     border-width: 0 1px 0 0;
 }
-.ui-flipbook-status { height: 1.5em; line-height: 1.5em; padding: 0.2em; }
-.ui-flipbook-buttons { margin: 0.8em auto; width: 9em; }
-.ui-flipbook-buttons a:last-child { margin-right: 0; }
-.ui-flipbook-speed {
+.ui-fb-status { height: 1.5em; line-height: 1.5em; padding: 0.2em; }
+.ui-fb-buttons { margin: 0.8em auto; width: 9em; }
+.ui-fb-buttons a:last-child { margin-right: 0; }
+.ui-fb-speed {
     margin-top: 0.8em;
     height: 5px;
 }
-.ui-flipbook-speed .ui-slider-handle {
+.ui-fb-speed .ui-slider-handle {
     height: 9px; width: 9px;
     top: -3px; margin-left: -6px;
 }
-.ui-flipbook-loop { width: 9em; margin: 0.8em auto; float: none; }
-.ui-flipbook-loop .fg-button { display: block; float: none; width: 100%; margin: -1px 0 0; }
-.ui-flipbook-loop .ui-state-hover { z-index: 13; }
-.ui-flipbook-loop .ui-state-active { z-index: 17; }
-ul.ui-flipbook-indicators { list-style-type: none; clear: both; margin: 0; padding: 0; width: 100%; font-size: 1.2em; }
-ul.ui-flipbook-indicators li { float: left; color: green; margin: 0 0 0.2em; padding: 0 0.2em; }
-ul.ui-flipbook-indicators li.disabled { color: red; background: none !important; }
-ul.ui-flipbook-indicators li.active { background: #85B5D9; }
+.ui-fb-loop { width: 9em; margin: 0.8em auto; float: none; }
+.ui-fb-loop .ui-fb-button { display: block; float: none; width: 100%; margin: -1px 0 0; }
+.ui-fb-loop .ui-state-hover { z-index: 13; }
+.ui-fb-loop .ui-state-active { z-index: 17; }
+ul.ui-fb-indicators { list-style-type: none; clear: both; margin: 0; padding: 0; width: 100%; font-size: 1.2em; }
+ul.ui-fb-indicators li { float: left; color: green; margin: 0 0 0.2em; padding: 0 0.2em; }
+ul.ui-fb-indicators li.disabled { color: red; background: none !important; }
+ul.ui-fb-indicators li.active { background: #85B5D9; }
 
-.ui-flipbook-images {
+.ui-fb-images {
     position: relative; float: left;
     border-width: 0 0 0 1px;
     margin-left: -1px;
     padding: 3px;
 }
-.ui-flipbook-images img { position: absolute; top: 3px; left: 3px; }
-
-.ui-flipbook-normal { color: #777777; text-shadow: 0 0 0 white; }
-.ui-flipbook-accent { color: #2E6E9E; text-shadow: 0 0 8px #E17009; }
+.ui-fb-images img { position: absolute; top: 3px; left: 3px; }
 

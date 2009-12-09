@@ -9,7 +9,6 @@
 
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.0.0/build/cssreset/reset-min.css">
     <link rel="stylesheet" type="text/css" href="css/jquery-ui-1.7.2.redmond.css">
-    <link rel="stylesheet" type="text/css" href="css/jquery-ui.button.css">
     <link rel="stylesheet" type="text/css" href="css/jquery-ui.flipbook.css">
 
     <style type="text/css" media="screen">
@@ -19,7 +18,7 @@
         :focus { outline: none; }
         :focus::-moz-focus-inner { border-color: transparent; }
 
-        .ui-flipbook {
+        .ui-fb {
             -moz-box-shadow: 5px 5px 7px #AAA;
             -webkit-box-shadow: 5px 5px 7px #AAA;
             box-shadow: 5px 5px 7px #AAA;
@@ -30,7 +29,7 @@
             var $flipbook = $('#flipbook');
             $flipbook.flipbook();
 
-            $('.ui-flipbook-images', $flipbook[0]).append(
+            $('.ui-fb-images', $flipbook[0]).append(
                 $('<img />').attr('src','http://www.press.uchicago.edu/books/AMSweather/AMS_02_space_weather_aurora_wikipedia.jpeg')
             );
         });
@@ -40,7 +39,7 @@
 
     <div id="flipbook"></div>
 <!--
-            <ul class="ui-flipbook-indicators ui-helper-clearfix">
+            <ul class="ui-fb-indicators ui-helper-clearfix">
                 <li class="ui-corner-all">&#x2714;</li>
                 <li class="ui-corner-all">&#x2714;</li>
                 <li class="ui-corner-all">&#x2714;</li>
