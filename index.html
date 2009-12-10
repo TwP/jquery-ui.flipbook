@@ -25,36 +25,49 @@
         }
     </style>
     <script type="text/javascript" charset="utf-8">
+        var imageUrls = [
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f000.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f006.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f012.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f018.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f024.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f030.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f036.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f042.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f048.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f054.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f060.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f066.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f072.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f078.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f084.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f090.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f096.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f102.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f108.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f114.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f120.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f126.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f132.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f138.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f144.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f150.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f156.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f162.png',
+            'http://fim.noaa.gov/FIMscp/from_jet/fim.fim.2009120912.temp_850_f168.png'
+        ];
+
         $(function() {
             var $flipbook = $('#flipbook');
-            $flipbook.flipbook();
-
-            $('.ui-fb-images', $flipbook[0]).append(
-                $('<img />').attr('src','http://www.press.uchicago.edu/books/AMSweather/AMS_02_space_weather_aurora_wikipedia.jpeg')
-            );
+            $flipbook.flipbook({
+                images: imageUrls
+            });
         });
     </script>
 </head>
 <body>
 
     <div id="flipbook"></div>
-<!--
-            <ul class="ui-fb-indicators ui-helper-clearfix">
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all disabled">&#x2718;</li>
-                <li class="ui-corner-all disabled">&#x2718;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-                <li class="ui-corner-all">&#x2714;</li>
-            </ul>
--->
+
 </body>
 </html>

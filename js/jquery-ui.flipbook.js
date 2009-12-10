@@ -16,7 +16,7 @@ jq.widget('ui.flipbook', {
             '    <div class="ui-fb-status ui-widget-content ui-corner-all"></div>' +
             '    <div class="ui-fb-buttons ui-helper-clearfix">' +
             '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Prev"><span class="ui-icon ui-icon-seek-prev"></span>Prev</a>' +
-            '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Play"><span class="ui-icon ui-icon-play"></span>Play</a>' +
+            '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Play"><span class="ui-icon ui-icon-play"></span>Play or Pause</a>' +
             '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Next"><span class="ui-icon ui-icon-seek-next"></span>Next</a>' +
             '    </div>' +
             '    <div class="ui-fb-speed"></div>' +
@@ -27,15 +27,23 @@ jq.widget('ui.flipbook', {
             '    </div>' +
             '    <ul class="ui-fb-indicators ui-helper-clearfix"></ul>' +
             '</div>' +
-            '<div class="ui-fb-images ui-widget-content ui-corner-right" style="width:500px;height:375px;">' +
+            '<div class="ui-fb-images ui-widget-content ui-corner-right">' +
+            '  <div class="ui-fb-loader" style="display:none;"><div class="ui-widget-overlay ui-corner-all"></div>Loading ... <span></span></div>' +
             '</div>'
         );
 
+        this.images = jq('.ui-fb-images', context);
+        this.indicators = jq('ul.ui-fb-indicators', context)
+        .bind('click', function(e) {
+          if (e.target.nodeName !== 'LI') { return; }
+          self._toggle(e.target);
+        });
+
         // slider for animation speed
         jq('.ui-fb-speed', context).slider({
-            min: 1,
-            max: this.options.maxFrameRate,
-            value: 8,
+            min: 2,
+            max: 40,
+            value: 32,
             range: 'min',
             change: function(event, ui) { self._delay(ui.value) }
         });
@@ -61,29 +69,19 @@ jq.widget('ui.flipbook', {
             }
         });
 
-        jq('a[title=Play]', context).click(function() {
-            console.log('play');
-        });
-        jq('a[title=Prev]', context).click(function() {
-            console.log('prev');
-        });
-        jq('a[title=Next]', context).click(function() {
-            console.log('next');
-        });
+        this.playPause = jq('a[title=Play]', context).click(function() { self._startStop() });
+        jq('a[title=Prev]', context).click(function() { self._activate(self.stop().prev()) });
+        jq('a[title=Next]', context).click(function() { self._activate(self.stop().next()) });
 
-
-        jq('button[name=Forward]', context).click(function() {
-            console.log('forward');
-        });
-        jq('button[name=Reverse]', context).click(function() {
-            console.log('reverse');
-        });
-        jq('button[name=Bounce]', context).click(function() {
-            console.log('bounce');
-        });
-
+        jq('button[name=Forward]', context).click(function() { self._direction('forward') });
+        jq('button[name=Reverse]', context).click(function() { self._direction('reverse') });
+        jq('button[name=Bounce]', context).click(function() { self._direction('bounce') });
 
         this._delay(jq('.ui-fb-speed', context).slider('value'));
+        this._imageList = [];
+        this.direction = 'forward';
+
+        this._setData('images', o.images);
     },
 
     destroy: function() {
@@ -94,20 +92,213 @@ jq.widget('ui.flipbook', {
         .empty();
     },
 
-    _delay: function( frameRate ) {
-        this.delay = 1 / frameRate * 1000;
+    _setData: function( key, value ) {
+        jq.widget.prototype._setData.apply(this, arguments);
+
+        switch (key) {
+            case 'images':
+                if (value && value.length > 0) this.stop()._load();
+                break;
+        }
     },
 
-    _next: function() { },
-    _prev: function() { }
+    _load: function() {
+        var self = this,
+            obj = null,
+            $loader = $('.ui-fb-loader', this.element[0]);
+
+        this.images.find('img').remove();
+        this._imageList.length = 0;
+        this.indicators.empty();
+        this._imageLoadCount = 0;
+        $loader.find('span').empty().end().show();
+
+        jq.each(this.options.images, function(ii, val) {
+            obj = {
+                image:     jq('<img />').attr('src',val).load(function() {self._imageLoaded($loader)}),
+                indicator: jq('<li>&#x2714;</li>').addClass('ui-corner-all').attr('title',ii+1)
+            };
+            self._imageList.push(obj);
+            self.images.append(obj.image);
+            self.indicators.append(obj.indicator);
+        });
+
+        return this;
+    },
+
+    _imageLoaded: function( $loader ) {
+        this._imageLoadCount++;
+        $loader.find('span').text(this._imageLoadCount);
+
+        if (this._imageLoadCount === this._imageList.length) {
+            var $image = this._imageList[0].image;
+            this.images.css({width: $image.width(), height: $image.height()});
+            this._activate(0);
+            $loader.hide();
+            this.start();
+        }
+
+        return this;
+    },
+
+    _activate: function( index ) {
+        this.images.find('img').hide();
+        this.indicators.find('li').removeClass('active');
+
+        var obj = this._imageList[index];
+        obj.image.show();
+        obj.indicator.addClass('active');
+        this._active = index;
+
+        return this;
+    },
+
+    _toggle: function( li ) {
+        var $li = $(li);
+
+        $li.hasClass('disabled') ?
+            $li.removeClass('disabled').html('&#x2714;') :
+            $li.addClass('disabled').html('&#x2718;');
+
+        return this;
+    },
+
+    _delay: function( frameRate ) {
+        this.delay = 25 * (42 - frameRate);
+
+        if (this._running) {
+            this._stop();
+            this._start();
+        }
+    },
+
+    next: function() {
+        var index = this._active,
+            found = null,
+            list = this._imageList,
+            length = list.length;
+
+        do {
+            index++;
+            if (index >= length) index = 0;
+            if (index === this._active) return index;
+            if (! list[index].indicator.hasClass('disabled')) found = index;
+        } while (found === null);
+
+        return found;
+    },
+
+    prev: function() {
+        var index = this._active,
+            found = null,
+            list = this._imageList,
+            length = list.length;
+
+        do {
+            index--;
+            if (index < 0) index = length-1;
+            if (index === this._active) return index;
+            if (! list[index].indicator.hasClass('disabled')) found = index;
+        } while (found === null);
+
+        return found;
+    },
+
+    start: function() {
+        if (this._start()) {
+            this.playPause
+            .attr('title', 'Pause')
+            .find('span')
+                .removeClass('ui-icon-play').addClass('ui-icon-pause');
+        }
+        return this;
+    },
+
+    stop: function() {
+        if (this._stop()) {
+            this.playPause
+            .attr('title', 'Play')
+            .find('span')
+                .removeClass('ui-icon-pause').addClass('ui-icon-play');
+        }
+        return this;
+    },
+
+    _forward: function() { this._activate(this.next()) },
+    _reverse: function() { this._activate(this.next()) },
+
+    _startStop: function() {
+        this._running ? this.stop() : this.start();
+        return this;
+    },
+
+    _start: function() {
+        if (!this._running) {
+            var self = this,
+                func = null;
+
+            switch (this.direction) {
+                case 'forward':
+                    func = function() { self._activate(self.next()) };
+                    this._bounceDir = 'next';
+                    break;
+                case 'reverse':
+                    func = function() { self._activate(self.prev()) };
+                    this._bounceDir = 'prev';
+                    break;
+                case 'bounce':
+                    if (!this._bounceDir) this._bounceDir = 'next';
+                    func = function() {
+                        var index;
+                        if (self._bounceDir === 'next') {
+                            index = self.next();
+                            if (index < self._active) {
+                                index = self.prev();
+                                self._bounceDir = 'prev';
+                            }
+                        } else {
+                            index = self.prev();
+                            if (index > self._active) {
+                                index = self.next();
+                                self._bounceDir = 'next';
+                            }
+                        }
+                        self._activate(index);
+                    };
+                    break;
+            }
+
+            this._running = setInterval(func, this.delay);
+            return true;
+        }
+        return false;
+    },
+
+    _stop: function() {
+        if (this._running) {
+            clearInterval(this._running);
+            this._running = 0;
+            return true;
+        }
+        return false;
+    },
+
+    _direction: function( dir ) {
+        this.direction = dir;
+        if (this._running) {
+            this._stop();
+            this._start();
+        }
+        return this;
+    }
+
 
 });
 
 jq.extend(jq.ui.flipbook, {
   version: '0.0.0',
   defaults: {
-    images: [],
-    maxFrameRate: 24
+    images: []
   }
 });
 
