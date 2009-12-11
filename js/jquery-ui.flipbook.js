@@ -43,7 +43,7 @@ jq.widget('ui.flipbook', {
         .bind('click', function(e) {
             if (o.disabled) return;
             if (e.target.nodeName !== 'LI') return;
-            self._toggle(e.target);
+            jq(e.target).toggleClass('ui-state-disabled');
         });
 
         // slider for animation speed
@@ -123,7 +123,7 @@ jq.widget('ui.flipbook', {
         jq.each(this.options.images, function(ii, val) {
             obj = {
                 image:     jq('<img />').attr('src',val).load(function() {self._imageLoaded(ii)}),
-                indicator: jq('<li>&#x2718;</li>').addClass('ui-corner-all disabled').attr('title',ii+1)
+                indicator: jq('<li></li>').addClass('ui-corner-all ui-state-default ui-state-disabled').text(ii+1)
             };
             self._imageList.push(obj);
             self.images.append(obj.image);
@@ -135,7 +135,7 @@ jq.widget('ui.flipbook', {
 
     _imageLoaded: function( index ) {
         this._imageLoadCount++;
-        this._toggle(this._imageList[index].indicator[0]);
+        this._imageList[index].indicator.toggleClass('ui-state-disabled');
 
         if (this._imageLoadCount === 1) {
             var $image = this._imageList[index].image;
@@ -151,22 +151,12 @@ jq.widget('ui.flipbook', {
 
     _activate: function( index ) {
         this.images.find('img').hide();
-        this.indicators.find('li').removeClass('active');
+        this.indicators.find('li').removeClass('ui-state-active');
 
         var obj = this._imageList[index];
         obj.image.show();
-        obj.indicator.addClass('active');
+        obj.indicator.addClass('ui-state-active');
         this._active = index;
-
-        return this;
-    },
-
-    _toggle: function( li ) {
-        var $li = $(li);
-
-        $li.hasClass('disabled') ?
-            $li.removeClass('disabled').html('&#x2714;') :
-            $li.addClass('disabled').html('&#x2718;');
 
         return this;
     },
@@ -190,7 +180,7 @@ jq.widget('ui.flipbook', {
             index++;
             if (index >= length) index = 0;
             if (index === this._active) return index;
-            if (! list[index].indicator.hasClass('disabled')) found = index;
+            if (! list[index].indicator.hasClass('ui-state-disabled')) found = index;
         } while (found === null);
 
         return found;
@@ -206,7 +196,7 @@ jq.widget('ui.flipbook', {
             index--;
             if (index < 0) index = length-1;
             if (index === this._active) return index;
-            if (! list[index].indicator.hasClass('disabled')) found = index;
+            if (! list[index].indicator.hasClass('ui-state-disabled')) found = index;
         } while (found === null);
 
         return found;
