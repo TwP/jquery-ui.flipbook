@@ -31,12 +31,11 @@ jq.widget('ui.flipbook', {
             '</div>'
         );
 
-/*
-        var $buttons = jq('.ui-fb-buttons', context).css('float','left'),
-            width = $buttons.outerWidth();
-        $buttons.css({float: 'none', width: width+2});
-        jq('.ui-fb-loop', context).css('width', width);
-*/
+        var $buttons = jq('.ui-fb-buttons', context),
+            width = 3 * $buttons.find('a:first').outerWidth(true) - 6;
+        $buttons.width(width);
+        jq('.ui-fb-loop', context).width(width);
+
         this.images = jq('.ui-fb-images', context);
         this.indicators = jq('ul.ui-fb-indicators', context)
         .bind('click', function(e) {
@@ -53,6 +52,7 @@ jq.widget('ui.flipbook', {
             range: 'min',
             change: function(event, ui) { self._delay(ui.value) }
         });
+        jq('.ui-slider-range-min', context).addClass('ui-corner-left');
 
         // all hover and mousedown/up logic for buttons
         jq('.ui-fb-button:not(.ui-state-disabled)', context)

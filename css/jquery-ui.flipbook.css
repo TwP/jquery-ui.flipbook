@@ -31,27 +31,33 @@ button.ui-fb-button { width:auto; overflow:visible; }
 
 .ui-fb-controls {
     margin: 0; padding: 0.5em 1em; float: left; width: 12em;
-    border-width: 0 1px 0 0;
+    border-top-width: 0 !important;
+    border-bottom-width: 0 !important;
+    border-left-width: 0 !important;
+    background: none !important;
 }
-.ui-fb-buttons { margin: 0.8em auto; width: 114px; }
+.ui-fb-buttons { margin: 0.8em auto; width: 9em; }
 .ui-fb-buttons a:last-child { margin-right: 0; }
 .ui-fb-speed { margin: 0.8em 0; height: 5px; }
 .ui-fb-speed .ui-slider-handle {
     height: 9px; width: 9px;
     top: -3px; margin-left: -6px;
 }
-.ui-fb-loop { width: 114px; margin: 0.8em auto; float: none; }
+.ui-fb-loop { width: 9em; margin: 0.8em auto; float: none; }
 .ui-fb-loop .ui-fb-button { display: block; float: none; width: 100%; margin: -1px 0 0; }
 .ui-fb-loop .ui-state-hover { z-index: 13; }
 .ui-fb-loop .ui-state-active { z-index: 17; }
 ul.ui-fb-indicators { list-style-type: none; clear: both; margin: 0.8em auto; padding: 0; width: 100%; }
-ul.ui-fb-indicators li { float: left; margin: 0 0.25em 0.3em; padding: 0; width: 2em; text-align: center; cursor: pointer !important; }
+ul.ui-fb-indicators li { float: left; margin: 0 0.25em 0.5em; padding: 0; width: 2em; text-align: center; cursor: pointer !important; }
 
 .ui-fb-images {
+    width: 30em; height: 20em;
     position: relative; float: left;
     margin-left: -1px; padding: 3px; overflow: hidden;
-    border-width: 0 0 0 1px;
-    width: 30em; height: 20em;
+    border-top-width: 0 !important;
+    border-bottom-width: 0 !important;
+    border-right-width: 0 !important;
+    background: none !important;
 }
 .ui-fb-images .ui-fb-loader {
     position:relative; width: 40%; height: 3em; margin: 1em auto; padding: 0.3em 0.8em;
