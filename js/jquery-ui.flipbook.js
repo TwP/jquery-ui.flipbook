@@ -32,11 +32,18 @@ jq.widget('ui.flipbook', {
             '</div>'
         );
 
+/*
+        var $buttons = jq('.ui-fb-buttons', context).css('float','left'),
+            width = $buttons.outerWidth();
+        $buttons.css({float: 'none', width: width+2});
+        jq('.ui-fb-loop', context).css('width', width);
+*/
         this.images = jq('.ui-fb-images', context);
         this.indicators = jq('ul.ui-fb-indicators', context)
         .bind('click', function(e) {
-          if (e.target.nodeName !== 'LI') { return; }
-          self._toggle(e.target);
+            if (o.disabled) return;
+            if (e.target.nodeName !== 'LI') return;
+            self._toggle(e.target);
         });
 
         // slider for animation speed
@@ -104,19 +111,19 @@ jq.widget('ui.flipbook', {
 
     _load: function() {
         var self = this,
-            obj = null,
-            $loader = $('.ui-fb-loader', this.element[0]);
+            obj = null;
 
+        $('.ui-fb-loader', this.element[0]).show();
+        this.options.disabled = true;
         this.images.find('img').remove();
         this._imageList.length = 0;
         this.indicators.empty();
         this._imageLoadCount = 0;
-        $loader.find('span').empty().end().show();
 
         jq.each(this.options.images, function(ii, val) {
             obj = {
-                image:     jq('<img />').attr('src',val).load(function() {self._imageLoaded($loader)}),
-                indicator: jq('<li>&#x2714;</li>').addClass('ui-corner-all').attr('title',ii+1)
+                image:     jq('<img />').attr('src',val).load(function() {self._imageLoaded(ii)}),
+                indicator: jq('<li>&#x2718;</li>').addClass('ui-corner-all disabled').attr('title',ii+1)
             };
             self._imageList.push(obj);
             self.images.append(obj.image);
@@ -126,17 +133,18 @@ jq.widget('ui.flipbook', {
         return this;
     },
 
-    _imageLoaded: function( $loader ) {
+    _imageLoaded: function( index ) {
         this._imageLoadCount++;
-        $loader.find('span').text(this._imageLoadCount);
+        this._toggle(this._imageList[index].indicator[0]);
 
-        if (this._imageLoadCount === this._imageList.length) {
-            var $image = this._imageList[0].image;
+        if (this._imageLoadCount === 1) {
+            var $image = this._imageList[index].image;
             this.images.css({width: $image.width(), height: $image.height()});
-            this._activate(0);
-            $loader.hide();
+            this._activate(index);
+            $('.ui-fb-loader', this.element[0]).hide();
             this.start();
         }
+        if (this._imageLoadCount === this._imageList.length) this.options.disabled = false;
 
         return this;
     },
