@@ -13,7 +13,6 @@ jq.widget('ui.flipbook', {
         .attr('role','flipbook')
         .append(
             '<div class="ui-fb-controls ui-widget-content ui-corner-left">' +
-            '    <div class="ui-fb-status ui-widget-content ui-corner-all"></div>' +
             '    <div class="ui-fb-buttons ui-helper-clearfix">' +
             '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Prev"><span class="ui-icon ui-icon-seek-prev"></span>Prev</a>' +
             '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Play"><span class="ui-icon ui-icon-play"></span>Play or Pause</a>' +
@@ -129,6 +128,8 @@ jq.widget('ui.flipbook', {
             self.images.append(obj.image);
             self.indicators.append(obj.indicator);
         });
+
+        this.indicators.width( 4 * this.indicators.find('li:first').outerWidth(true) );
 
         return this;
     },

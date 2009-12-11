@@ -14,7 +14,7 @@ button.ui-fb-button { width:auto; overflow:visible; }
 .ui-fb-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
 .ui-fb-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
 
-.ui-fb-button-icon-solo { display:block; width:8px; text-indent: -9999px; }    /* solo icon buttons must have block properties for the text-indent to work */
+.ui-fb-button-icon-solo { display: block; width: 16px; margin: 0; margin-right: 6px; padding: 6px 8px; text-indent: -9999px; }    /* solo icon buttons must have block properties for the text-indent to work */
 
 .ui-fb-buttonset { float:left; }
 .ui-fb-buttonset .ui-fb-button { float: left; }
@@ -33,23 +33,19 @@ button.ui-fb-button { width:auto; overflow:visible; }
     margin: 0; padding: 0.5em 1em; float: left; width: 12em;
     border-width: 0 1px 0 0;
 }
-.ui-fb-status { height: 1.5em; line-height: 1.5em; padding: 0.2em; }
-.ui-fb-buttons { margin: 0.8em auto; width: 9em; }
+.ui-fb-buttons { margin: 0.8em auto; width: 114px; }
 .ui-fb-buttons a:last-child { margin-right: 0; }
-.ui-fb-speed {
-    margin-top: 0.8em;
-    height: 5px;
-}
+.ui-fb-speed { margin: 0.8em 0; height: 5px; }
 .ui-fb-speed .ui-slider-handle {
     height: 9px; width: 9px;
     top: -3px; margin-left: -6px;
 }
-.ui-fb-loop { width: 9em; margin: 0.8em auto; float: none; }
+.ui-fb-loop { width: 114px; margin: 0.8em auto; float: none; }
 .ui-fb-loop .ui-fb-button { display: block; float: none; width: 100%; margin: -1px 0 0; }
 .ui-fb-loop .ui-state-hover { z-index: 13; }
 .ui-fb-loop .ui-state-active { z-index: 17; }
-ul.ui-fb-indicators { list-style-type: none; clear: both; margin: 0 auto; padding: 0; width: 11.5em; }
-ul.ui-fb-indicators li { float: left; margin: 0 0.25em 0.3em; padding: 0 0.2em; width: 1.8em; text-align: center; cursor: pointer !important; }
+ul.ui-fb-indicators { list-style-type: none; clear: both; margin: 0.8em auto; padding: 0; width: 100%; }
+ul.ui-fb-indicators li { float: left; margin: 0 0.25em 0.3em; padding: 0; width: 2em; text-align: center; cursor: pointer !important; }
 
 .ui-fb-images {
     position: relative; float: left;
