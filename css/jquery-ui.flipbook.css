@@ -27,7 +27,10 @@ button.ui-fb-button { width:auto; overflow:visible; }
 
 
 /* begin the flipbook styles */
-.ui-fb { float: left; }
+.ui-fb {
+    display: inline-block;
+    *float: left;  /* IE7 won't apply inline-block to divs */
+}
 
 .ui-fb-controls {
     margin: 0; padding: 0.5em 1em; float: left; width: 12em;
@@ -37,7 +40,6 @@ button.ui-fb-button { width:auto; overflow:visible; }
     background: none !important;
 }
 .ui-fb-buttons { margin: 0.8em auto; width: 9em; }
-.ui-fb-buttons a:last-child { margin-right: 0; }
 .ui-fb-speed { margin: 0.8em 0; height: 5px; }
 .ui-fb-speed .ui-slider-handle {
     height: 9px; width: 9px;

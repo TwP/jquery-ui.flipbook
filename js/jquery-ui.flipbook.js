@@ -16,7 +16,7 @@ jq.widget('ui.flipbook', {
             '    <div class="ui-fb-buttons ui-helper-clearfix">' +
             '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Prev"><span class="ui-icon ui-icon-seek-prev"></span>Prev</a>' +
             '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Play"><span class="ui-icon ui-icon-play"></span>Play or Pause</a>' +
-            '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Next"><span class="ui-icon ui-icon-seek-next"></span>Next</a>' +
+            '        <a class="ui-fb-button ui-state-default ui-fb-button-icon-solo ui-corner-all" title="Next" style="margin-right:0;"><span class="ui-icon ui-icon-seek-next"></span>Next</a>' +
             '    </div>' +
             '    <div class="ui-fb-speed"></div>' +
             '    <div class="ui-fb-loop ui-fb-buttonset ui-fb-buttonset-single">' +
