@@ -69,3 +69,6 @@ ul.ui-fb-indicators li { float: left; margin: 0 0.25em 0.5em; padding: 0; width:
 .ui-fb-images .ui-fb-loader .ui-widget-overlay { z-index: 1; }
 .ui-fb-images img { position: absolute; top: 3px; left: 3px; display: none; }
 
+.ui-fb-hide-controls .ui-fb-controls { display: none !important; }
+.ui-fb-hide-controls .ui-fb-images { margin: 0 !important; border-width: 0 !important; }
+
