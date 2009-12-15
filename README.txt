@@ -1,32 +1,33 @@
-jquery-ui.flipbook
-    by FIXME (your name)
-    FIXME (url)
+FlipBook
+    by Tim Pease
+    http://pea53.com/jquery-ui.flipbook
 
 == DESCRIPTION:
 
-FIXME (describe your package)
+FlipBook will take a sequential time series of images and animate  them. Each
+image is shown for a short period of time and then replaced by the next image
+in the series.
 
-== FEATURES/PROBLEMS:
+== FEATURES:
 
-* FIXME (list of features or problems)
-
-== SYNOPSIS:
-
-  FIXME (code sample of usage)
+* begin animation immediately
+* skips images that have not yet been loaded by the browser
+* set the animation speed
+* change animation direction
+* exclude specific images
+* single step through the images
+* resizes to fit the images
 
 == REQUIREMENTS:
 
-* FIXME (list of requirements)
-
-== INSTALL:
-
-* FIXME (sudo gem install, anything else)
+You will need jQuery, jQuery UI and the supporting CSS styles to use this
+widget. Specifically, the UI slider is required.
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2009 FIXME (different license?)
+Copyright (c) 2009
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
