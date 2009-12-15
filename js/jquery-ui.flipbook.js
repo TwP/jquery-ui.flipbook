@@ -92,7 +92,7 @@ jq.widget('ui.flipbook', {
 
     destroy: function() {
         this.element
-        .removeClass('ui-fb ui-widget ui-widget-content ui-corner-all ui-helper-clearfix')
+        .removeClass('ui-fb ui-fb-hide-controls ui-widget ui-widget-content ui-corner-all ui-helper-clearfix')
         .removeAttr('role','flipbook')
         .removeData('flipbook')
         .empty();
@@ -295,7 +295,7 @@ jq.widget('ui.flipbook', {
 });
 
 jq.extend(jq.ui.flipbook, {
-  version: '0.0.0',
+  version: '1.0.0',
   defaults: {
     images: []
   }
