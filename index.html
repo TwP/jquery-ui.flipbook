@@ -28,11 +28,21 @@
         }
         a:hover { background-color: #599994; }
 
+        ul { margin: 1em 0 0; }
+        ul li:before {
+            content: "\2022 \0020";
+            color: #F5BD6A;
+        }
+
         #header { padding-left: 2em; }
         #header .embiggen { color: #115D6E; text-shadow: 3px 4px 3px #B9E9E4; font-family: Airstream; font-size: 5em; }
         #header .subtext { color: #E8601A; font-size: 1.2em; position: relative; top: 1.2em; left: -7.3em; }
 
         #content { padding: 0 3em; }
+
+        #footer { padding: 0 3em; }
+
+        .parenthetical { font-style: italic; color: #599994; }
     </style>
 </head>
 <body>
@@ -45,8 +55,32 @@
     <div id="content">
         <h1>Overview</h1>
 
-        <p>Foo Bar Baz</p>
+        <p>Junior high was spent doodling in the top left corner of my school
+        notebooks making little flipbook animations. These mostly involved
+        stick figures running, falling, and some red ink for the splatters.
+        Here is the web 2.0 incarnation of these junior high doodles -
+        <span class="parenthetical">with more science and less splatter</span>.</p>
 
+        <p>FlipBook will take a sequential time series of images and <i>animate</i>
+        them. Each image is shown for a short period of time and then replaced
+        by the next image in the series. The animation begins as soon as the
+        first image is loaded; images that have not yet been downloaded from
+        the server are skipped. They are included in the animation sequence
+        after they have been loaded by the browser.</p>
+
+        <p>Other features include:</p>
+
+        <ul>
+            <li>set the animation speed</li>
+            <li>change animation direction</li>
+            <li>exclude specific images</li>
+            <li>single step through the images</li>
+            <li>resizes to fit the images</li>
+        </ul>
+
+        <p>You can see a nice example of a FlipBook just below. Keep on reading
+        for instructions on how to download and use FlipBook for your own
+        website.</p>
 
         <h1>Example</h1>
 
@@ -55,7 +89,13 @@
         <iframe frameborder="0" style="width:100%;height:615px;overflow:hidden" src="example.html"></iframe>
         <p><a href="example.html">View this example in a new page</a></p>
 
-        <h1>Source Code</h1>
+        <h1>Using</h1>
+
+        <p>
+            how to install
+            how to use
+        </p>
+
 
         <p><a href="http://github.com/TwP/jquery-ui.flipbook">http://github.com/TwP/jquery-ui.flipbook</a></p>
 
