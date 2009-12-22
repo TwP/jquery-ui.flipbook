@@ -41,7 +41,9 @@ jq.widget('ui.flipbook', {
         .bind('click', function(e) {
             if (o.disabled) return;
             if (e.target.nodeName !== 'LI') return;
-            jq(e.target).toggleClass('ui-state-disabled');
+
+            var $target = jq(e.target);
+            if (!$target.hasClass('ui-fb-not-loaded')) { $target.toggleClass('ui-state-disabled') }
         });
 
         // slider for animation speed
@@ -86,6 +88,11 @@ jq.widget('ui.flipbook', {
         this._delay(jq('.ui-fb-speed', context).slider('value'));
         this._imageList = [];
         this.direction = 'forward';
+        this._retry = {
+            list: [],
+            count: 0,
+            id: 0
+        };
 
         this._setData('images', o.images);
     },
@@ -112,6 +119,10 @@ jq.widget('ui.flipbook', {
         var self = this,
             obj = null;
 
+        clearInterval(this._retry.id);
+        this._retry.list.length = 0;
+        this._retry.count = 0;
+
         $('.ui-fb-loader', this.element[0]).show();
         this.options.disabled = true;
         this.images.find('img').remove();
@@ -121,22 +132,37 @@ jq.widget('ui.flipbook', {
 
         jq.each(this.options.images, function(ii, val) {
             obj = {
-                image:     jq('<img />').attr('src',val).load(function() {self._imageLoaded(ii)}),
+                image:     jq('<img />'),    // just a placeholder for now
                 indicator: jq('<li></li>').addClass('ui-corner-all ui-state-default ui-state-disabled').text(ii+1)
             };
             self._imageList.push(obj);
             self.images.append(obj.image);
             self.indicators.append(obj.indicator);
+            self._addImage(ii, val);
         });
 
         this.indicators.width( 4 * this.indicators.find('li:first').outerWidth(true) );
+        this._retry.id = setInterval(function() {self._retryLoad()}, 1000);
+        return this;
+    },
 
+    _addImage: function( index, src ) {
+        var self = this,
+            obj = this._imageList[index],
+            oldImg = obj.image,
+            newImg = jq('<img />')
+                  .attr('src',src)
+                  .load(function() {self._imageLoaded(index)})
+                  .error(function() {self._retry.list.push(index)});
+
+        obj.image = newImg;
+        oldImg.removeAttr('src').replaceWith(newImg);
         return this;
     },
 
     _imageLoaded: function( index ) {
         this._imageLoadCount++;
-        this._imageList[index].indicator.toggleClass('ui-state-disabled');
+        this._imageList[index].indicator.toggleClass('ui-state-disabled').removeClass('ui-fb-not-loaded');
 
         if (this._imageLoadCount === 1) {
             var $image = this._imageList[index].image;
@@ -145,9 +171,28 @@ jq.widget('ui.flipbook', {
             $('.ui-fb-loader', this.element[0]).hide();
             this.start();
         }
-        if (this._imageLoadCount === this._imageList.length) this.options.disabled = false;
 
         return this;
+    },
+
+    _retryLoad: function() {
+        if ((this._imageLoadCount === this._imageList.length) || (this._retry.count >= this.options.wait)) {
+            clearInterval(this._retry.id);
+            this._retry.id = 0;
+            this.indicators.find('.ui-state-disabled').addClass('ui-fb-not-loaded');
+            this.options.disabled = false;
+            (this._imageLoadCount === this._imageList.length) ?
+                this._trigger('load') : this._trigger('error');
+            return this;
+        }
+
+        var self = this,
+            images = this.options.images,
+            img = null;
+
+        jq.each(this._retry.list, function(ii, index) {self._addImage(index, images[index])});
+        this._retry.count++;
+        this._retry.list.length = 0;
     },
 
     _activate: function( index ) {
@@ -295,9 +340,10 @@ jq.widget('ui.flipbook', {
 });
 
 jq.extend(jq.ui.flipbook, {
-  version: '1.0.0',
+  version: '1.1.0',
   defaults: {
-    images: []
+    images: [],
+    wait: 60
   }
 });
 
