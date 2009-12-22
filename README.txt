@@ -17,6 +17,7 @@ in the series.
 * exclude specific images
 * single step through the images
 * resizes to fit the images
+* automatic retry if images fail to load the first time
 
 == REQUIREMENTS:
 

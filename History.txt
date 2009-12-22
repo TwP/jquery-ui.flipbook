@@ -1,4 +1,9 @@
+== 1.1.0 / 2009-12-22
+
+Minor Enhancements
+* Automatic retry for images that failed to load
+
 == 1.0.0 / 2009-12-15
 
-* 1 major enhancement
-  * Birthday!
+Major Enhancements
+* Birthday!
