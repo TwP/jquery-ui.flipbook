@@ -24,6 +24,17 @@ in the series.
 You will need jQuery, jQuery UI and the supporting CSS styles to use this
 widget. Specifically, the UI slider is required.
 
+== INSTALL:
+
+Download the latest release package. You will find this readme along with the
+FlipBook javascript file and the FlipBook CSS file. Copy these two files to a
+public location on your webserver, and then add the appropriate script and
+link tags to your pages where FlipBook will be used.
+
+You can download FlipBook releases here:
+
+http://github.com/TwP/jquery-ui.flipbook/downloads
+
 == LICENSE:
 
 (The MIT License)
