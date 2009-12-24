@@ -41,9 +41,18 @@ jq.widget('ui.flipbook', {
         .bind('click', function(e) {
             if (o.disabled) return;
             if (e.target.nodeName !== 'LI') return;
-
             var $target = jq(e.target);
             if (!$target.hasClass('ui-fb-not-loaded')) { $target.toggleClass('ui-state-disabled') }
+        })
+        .bind('mouseover', function(e) {
+            if (o.disabled) return;
+            if (e.target.nodeName !== 'LI') return;
+            jq(e.target).addClass('ui-state-hover');
+        })
+        .bind('mouseout', function(e) {
+            if (o.disabled) return;
+            if (e.target.nodeName !== 'LI') return;
+            jq(e.target).removeClass('ui-state-hover');
         });
 
         // slider for animation speed
@@ -340,7 +349,7 @@ jq.widget('ui.flipbook', {
 });
 
 jq.extend(jq.ui.flipbook, {
-  version: '1.1.0',
+  version: '1.1.1',
   defaults: {
     images: [],
     wait: 60
