@@ -51,6 +51,7 @@ button.ui-fb-button { width:auto; overflow:visible; }
 .ui-fb-loop .ui-state-active { z-index: 17; }
 ul.ui-fb-indicators { list-style-type: none; clear: both; margin: 0.8em auto; padding: 0; width: 100%; }
 ul.ui-fb-indicators li { float: left; margin: 0 0.25em 0.5em; padding: 0; width: 2em; text-align: center; cursor: pointer !important; }
+ul.ui-fb-indicators li.ui-fb-not-loaded { cursor: default !important; }
 
 .ui-fb-images {
     width: 30em; height: 20em;

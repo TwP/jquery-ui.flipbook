@@ -39,20 +39,22 @@ jq.widget('ui.flipbook', {
         this.images = jq('.ui-fb-images', context);
         this.indicators = jq('ul.ui-fb-indicators', context)
         .bind('click', function(e) {
-            if (o.disabled) return;
             if (e.target.nodeName !== 'LI') return;
             var $target = jq(e.target);
-            if (!$target.hasClass('ui-fb-not-loaded')) { $target.toggleClass('ui-state-disabled') }
+            if ($target.hasClass('ui-fb-not-loaded')) return;
+            $target.toggleClass('ui-state-disabled');
         })
         .bind('mouseover', function(e) {
-            if (o.disabled) return;
             if (e.target.nodeName !== 'LI') return;
-            jq(e.target).addClass('ui-state-hover');
+            var $target = jq(e.target);
+            if ($target.hasClass('ui-fb-not-loaded')) return;
+            $target.addClass('ui-state-hover');
         })
         .bind('mouseout', function(e) {
-            if (o.disabled) return;
             if (e.target.nodeName !== 'LI') return;
-            jq(e.target).removeClass('ui-state-hover');
+            var $target = jq(e.target);
+            if ($target.hasClass('ui-fb-not-loaded')) return;
+            $target.removeClass('ui-state-hover');
         });
 
         // slider for animation speed
@@ -133,7 +135,6 @@ jq.widget('ui.flipbook', {
         this._retry.count = 0;
 
         $('.ui-fb-loader', this.element[0]).show();
-        this.options.disabled = true;
         this.images.find('img').remove();
         this._imageList.length = 0;
         this.indicators.empty();
@@ -142,7 +143,7 @@ jq.widget('ui.flipbook', {
         jq.each(this.options.images, function(ii, val) {
             obj = {
                 image:     jq('<img />'),    // just a placeholder for now
-                indicator: jq('<li></li>').addClass('ui-corner-all ui-state-default ui-state-disabled').text(ii+1)
+                indicator: jq('<li></li>').addClass('ui-corner-all ui-state-default ui-state-disabled ui-fb-not-loaded').text(ii+1)
             };
             self._imageList.push(obj);
             self.images.append(obj.image);
@@ -188,8 +189,6 @@ jq.widget('ui.flipbook', {
         if ((this._imageLoadCount === this._imageList.length) || (this._retry.count >= this.options.wait)) {
             clearInterval(this._retry.id);
             this._retry.id = 0;
-            this.indicators.find('.ui-state-disabled').addClass('ui-fb-not-loaded');
-            this.options.disabled = false;
             (this._imageLoadCount === this._imageList.length) ?
                 this._trigger('load') : this._trigger('error');
             return this;
