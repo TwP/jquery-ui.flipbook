@@ -157,11 +157,13 @@ jq.widget('ui.flipbook', {
     },
 
     _addImage: function( index, src ) {
+        if (this._retry.count) { src += '?_=' + (new Date).getTime() }
+
         var self = this,
             obj = this._imageList[index],
             oldImg = obj.image,
             newImg = jq('<img />')
-                  .attr('src',src)
+                  .attr('src', src)
                   .load(function() {self._imageLoaded(index)})
                   .error(function() {self._retry.list.push(index)});
 
@@ -198,8 +200,8 @@ jq.widget('ui.flipbook', {
             images = this.options.images,
             img = null;
 
-        jq.each(this._retry.list, function(ii, index) {self._addImage(index, images[index])});
         this._retry.count++;
+        jq.each(this._retry.list, function(ii, index) {self._addImage(index, images[index])});
         this._retry.list.length = 0;
     },
 
