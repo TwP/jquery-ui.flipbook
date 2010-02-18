@@ -1,3 +1,11 @@
+== 1.2.0 / 2010-02-18
+
+Minor Enhancement
+* Added keyboard controls for play/pause, next/prev, faster/slower
+
+Bug Fix
+* Fixing a wrapping issue when the screen is narrower than the flipbook
+
 == 1.1.2 / 2010-01-28
 
 Bug Fix

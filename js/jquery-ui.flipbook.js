@@ -66,6 +66,7 @@ jq.widget('ui.flipbook', {
             change: function(event, ui) { self._delay(ui.value) }
         });
         jq('.ui-slider-range-min', context).addClass('ui-corner-left');
+        var $handle = jq('.ui-fb-speed .ui-slider-handle', context);
 
         // all hover and mousedown/up logic for buttons
         jq('.ui-fb-button:not(.ui-state-disabled)', context)
@@ -106,9 +107,74 @@ jq.widget('ui.flipbook', {
         };
 
         this._setData('images', o.images);
+
+        // bind keyboard events to our flipbook controls
+        if (o.keyboard) {
+            this._keydown = function( event ) {
+                if (event.altKey || event.ctrlKey || event.metaKey) { return; }
+                var code = event.keyCode ? event.keyCode : event.which;
+
+                switch (code) {
+                case jq.ui.keyCode.SPACE:      // spacebar
+                    self._startStop();
+                    return false;    // prevent default browser behavior
+
+                case jq.ui.keyCode.LEFT:       // left arrow
+                    self._activate(self.stop().prev());
+                    return false;
+
+                case jq.ui.keyCode.RIGHT:      // right arrow
+                    self._activate(self.stop().next());
+                    return false;
+
+                case jq.ui.keyCode.UP:         // up arrow
+                case jq.ui.keyCode.DOWN:       // down arrow
+                    if (event.target === $handle[0]) { break; }
+
+                    event.target = $handle[0];
+                    $handle.trigger(event);
+                    return false;
+
+                case 66:   // 'b'
+                    jq('button[name=Bounce]', context).mousedown();
+                    self._direction('bounce');
+                    return false;
+
+                case 70:  // 'f'
+                    jq('button[name=Forward]', context).mousedown();
+                    self._direction('forward');
+                    return false;
+
+                case 82:  // 'r'
+                    jq('button[name=Reverse]', context).mousedown();
+                    self._direction('reverse');
+                    return false;
+                }
+            };
+
+            this._keyup = function( event ) {
+                var code = event.keyCode ? event.keyCode : event.which;
+
+                switch (code) {
+                case jq.ui.keyCode.UP:         // up arrow
+                case jq.ui.keyCode.DOWN:       // down arrow
+                    if (event.target === $handle[0]) { break; }
+
+                    event.target = $handle[0];
+                    $handle.trigger(event);
+                    return false;
+                }
+            };
+
+            jq(document).keydown(this._keydown).keyup(this._keyup);
+        }
     },
 
     destroy: function() {
+        if (this.options.keyboard) {
+            jq(document).unbind('keydown', this._keydown).unbind('keyup', this._keyup);
+        }
+
         this.element
         .removeClass('ui-fb ui-fb-hide-controls ui-widget ui-widget-content ui-corner-all ui-helper-clearfix')
         .removeAttr('role','flipbook')
@@ -179,8 +245,9 @@ jq.widget('ui.flipbook', {
         if (this._imageLoadCount === 1) {
             var $image = this._imageList[index].image;
             this.images.css({width: $image.width(), height: $image.height()});
+            this.element.css('min-width', this.images.outerWidth(true) + jq('.ui-fb-controls', this.element[0]).outerWidth(true));
             this._activate(index);
-            $('.ui-fb-loader', this.element[0]).hide();
+            jq('.ui-fb-loader', this.element[0]).hide();
             this.start();
         }
 
@@ -346,15 +413,15 @@ jq.widget('ui.flipbook', {
         return this;
     }
 
-
 });
 
 jq.extend(jq.ui.flipbook, {
-  version: '1.1.1',
-  defaults: {
-    images: [],
-    wait: 60
-  }
+    version: '1.2.0',
+    defaults: {
+        images: [],
+        wait: 60,
+        keyboard: true
+    }
 });
 
 })(jQuery);
