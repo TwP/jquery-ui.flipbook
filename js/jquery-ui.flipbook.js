@@ -200,7 +200,7 @@ jq.widget('ui.flipbook', {
         this._retry.list.length = 0;
         this._retry.count = 0;
 
-        $('.ui-fb-loader', this.element[0]).show();
+        jq('.ui-fb-loader', this.element[0]).show();
         this.images.find('img').remove();
         this._imageList.length = 0;
         this.indicators.empty();
