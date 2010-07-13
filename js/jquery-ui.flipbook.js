@@ -2,8 +2,14 @@
 (function(jq) {
 
 jq.widget('ui.flipbook', {
+    version: '1.2.0',
+    options: {
+        images: [],
+        wait: 60,
+        keyboard: true
+    },
 
-    _init: function( ) {
+    _create: function( ) {
         var self = this,
             o = this.options,
             context = this.element[0];
@@ -106,7 +112,7 @@ jq.widget('ui.flipbook', {
             id: 0
         };
 
-        this._setData('images', o.images);
+        this._setOption('images', o.images);
 
         // bind keyboard events to our flipbook controls
         if (o.keyboard) {
@@ -182,8 +188,8 @@ jq.widget('ui.flipbook', {
         .empty();
     },
 
-    _setData: function( key, value ) {
-        jq.widget.prototype._setData.apply(this, arguments);
+    _setOption: function( key, value ) {
+        jq.Widget.prototype._setOption.apply(this, arguments);
 
         switch (key) {
             case 'images':
@@ -413,15 +419,6 @@ jq.widget('ui.flipbook', {
         return this;
     }
 
-});
-
-jq.extend(jq.ui.flipbook, {
-    version: '1.2.0',
-    defaults: {
-        images: [],
-        wait: 60,
-        keyboard: true
-    }
 });
 
 })(jQuery);
