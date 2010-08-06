@@ -72,7 +72,6 @@ jq.widget('ui.flipbook', {
             change: function(event, ui) { self._delay(ui.value) }
         });
         jq('.ui-slider-range-min', context).addClass('ui-corner-left');
-        var $handle = jq('.ui-fb-speed .ui-slider-handle', context);
 
         // all hover and mousedown/up logic for buttons
         jq('.ui-fb-button:not(.ui-state-disabled)', context)
@@ -95,9 +94,9 @@ jq.widget('ui.flipbook', {
             }
         });
 
-        this.playPause = jq('a[title=Play]', context).click(function() { self._startStop() });
-        jq('a[title=Prev]', context).click(function() { self._activate(self.stop().prev()) });
-        jq('a[title=Next]', context).click(function() { self._activate(self.stop().next()) });
+        this.playPause = jq('a[title=Play]', context).click(function() { self.startStop() });
+        jq('a[title=Prev]', context).click(function() { self.stop().prev() });
+        jq('a[title=Next]', context).click(function() { self.stop().next() });
 
         jq('button[name=Forward]', context).click(function() { self._direction('forward') });
         jq('button[name=Reverse]', context).click(function() { self._direction('reverse') });
@@ -112,73 +111,15 @@ jq.widget('ui.flipbook', {
             id: 0
         };
 
+        if (o.keyboard) { self._keyboardBindings(); }
         this._setOption('images', o.images);
-
-        // bind keyboard events to our flipbook controls
-        if (o.keyboard) {
-            this._keydown = function( event ) {
-                if (event.altKey || event.ctrlKey || event.metaKey) { return; }
-                var code = event.keyCode ? event.keyCode : event.which;
-
-                switch (code) {
-                case jq.ui.keyCode.SPACE:      // spacebar
-                    self._startStop();
-                    return false;    // prevent default browser behavior
-
-                case jq.ui.keyCode.LEFT:       // left arrow
-                    self._activate(self.stop().prev());
-                    return false;
-
-                case jq.ui.keyCode.RIGHT:      // right arrow
-                    self._activate(self.stop().next());
-                    return false;
-
-                case jq.ui.keyCode.UP:         // up arrow
-                case jq.ui.keyCode.DOWN:       // down arrow
-                    if (event.target === $handle[0]) { break; }
-
-                    event.target = $handle[0];
-                    $handle.trigger(event);
-                    return false;
-
-                case 66:   // 'b'
-                    jq('button[name=Bounce]', context).mousedown();
-                    self._direction('bounce');
-                    return false;
-
-                case 70:  // 'f'
-                    jq('button[name=Forward]', context).mousedown();
-                    self._direction('forward');
-                    return false;
-
-                case 82:  // 'r'
-                    jq('button[name=Reverse]', context).mousedown();
-                    self._direction('reverse');
-                    return false;
-                }
-            };
-
-            this._keyup = function( event ) {
-                var code = event.keyCode ? event.keyCode : event.which;
-
-                switch (code) {
-                case jq.ui.keyCode.UP:         // up arrow
-                case jq.ui.keyCode.DOWN:       // down arrow
-                    if (event.target === $handle[0]) { break; }
-
-                    event.target = $handle[0];
-                    $handle.trigger(event);
-                    return false;
-                }
-            };
-
-            jq(document).keydown(this._keydown).keyup(this._keyup);
-        }
     },
 
     destroy: function() {
         if (this.options.keyboard) {
-            jq(document).unbind('keydown', this._keydown).unbind('keyup', this._keyup);
+            jq(document)
+            .unbind(jq.browser.mozilla ? 'keypress' : 'keydown', this._keydown)
+            .unbind('keyup', this._keyup);
         }
 
         this.element
@@ -192,9 +133,9 @@ jq.widget('ui.flipbook', {
         jq.Widget.prototype._setOption.apply(this, arguments);
 
         switch (key) {
-            case 'images':
-                if (value && value.length > 0) this.stop()._load();
-                break;
+        case 'images':
+            if (value && value.length > 0) this.stop()._load();
+            break;
         }
     },
 
@@ -299,7 +240,7 @@ jq.widget('ui.flipbook', {
         }
     },
 
-    next: function() {
+    _next: function() {
         var index = this._active,
             found = null,
             list = this._imageList,
@@ -315,7 +256,7 @@ jq.widget('ui.flipbook', {
         return found;
     },
 
-    prev: function() {
+    _prev: function() {
         var index = this._active,
             found = null,
             list = this._imageList,
@@ -329,6 +270,16 @@ jq.widget('ui.flipbook', {
         } while (found === null);
 
         return found;
+    },
+
+    next: function() {
+        this._activate(this._next());
+        return this;
+    },
+
+    prev: function() {
+        this._activate(this._prev());
+        return this;
     },
 
     start: function() {
@@ -351,10 +302,7 @@ jq.widget('ui.flipbook', {
         return this;
     },
 
-    _forward: function() { this._activate(this.next()) },
-    _reverse: function() { this._activate(this.next()) },
-
-    _startStop: function() {
+    startStop: function() {
         this._running ? this.stop() : this.start();
         return this;
     },
@@ -365,34 +313,34 @@ jq.widget('ui.flipbook', {
                 func = null;
 
             switch (this.direction) {
-                case 'forward':
-                    func = function() { self._activate(self.next()) };
-                    this._bounceDir = 'next';
-                    break;
-                case 'reverse':
-                    func = function() { self._activate(self.prev()) };
-                    this._bounceDir = 'prev';
-                    break;
-                case 'bounce':
-                    if (!this._bounceDir) this._bounceDir = 'next';
-                    func = function() {
-                        var index;
-                        if (self._bounceDir === 'next') {
-                            index = self.next();
-                            if (index < self._active) {
-                                index = self.prev();
-                                self._bounceDir = 'prev';
-                            }
-                        } else {
-                            index = self.prev();
-                            if (index > self._active) {
-                                index = self.next();
-                                self._bounceDir = 'next';
-                            }
+            case 'forward':
+                func = function() { self.next() };
+                this._bounceDir = 'next';
+                break;
+            case 'reverse':
+                func = function() { self.prev() };
+                this._bounceDir = 'prev';
+                break;
+            case 'bounce':
+                if (!this._bounceDir) this._bounceDir = 'next';
+                func = function() {
+                    var index;
+                    if (self._bounceDir === 'next') {
+                        index = self._next();
+                        if (index < self._active) {
+                            index = self._prev();
+                            self._bounceDir = 'prev';
                         }
-                        self._activate(index);
-                    };
-                    break;
+                    } else {
+                        index = self._prev();
+                        if (index > self._active) {
+                            index = self._next();
+                            self._bounceDir = 'next';
+                        }
+                    }
+                    self._activate(index);
+                };
+                break;
             }
 
             this._running = setInterval(func, this.delay);
@@ -417,8 +365,73 @@ jq.widget('ui.flipbook', {
             this._start();
         }
         return this;
-    }
+    },
 
+    _keyboardBindings: function() {
+        var self = this,
+            context = this.element[0],
+            $handle = jq('.ui-fb-speed .ui-slider-handle', context);
+
+        this._keydown = function( event ) {
+            if (event.altKey || event.ctrlKey || event.metaKey) { return; }
+            var code = event.keyCode ? event.keyCode : event.which;
+
+            switch (code) {
+            case jq.ui.keyCode.SPACE:      // spacebar
+                self.startStop();
+                return false;    // prevent default browser behavior
+
+            case jq.ui.keyCode.LEFT:       // left arrow
+                self.stop().prev();
+                return false;
+
+            case jq.ui.keyCode.RIGHT:      // right arrow
+                self.stop().next();
+                return false;
+
+            case jq.ui.keyCode.UP:         // up arrow
+            case jq.ui.keyCode.DOWN:       // down arrow
+                if (event.target === $handle[0]) { break; }
+
+                event.target = $handle[0];
+                $handle.trigger(event);
+                return false;
+
+            case 66:   // 'b'
+                jq('button[name=Bounce]', context).mousedown();
+                self._direction('bounce');
+                return false;
+
+            case 70:  // 'f'
+                jq('button[name=Forward]', context).mousedown();
+                self._direction('forward');
+                return false;
+
+            case 82:  // 'r'
+                jq('button[name=Reverse]', context).mousedown();
+                self._direction('reverse');
+                return false;
+            }
+        };
+
+        this._keyup = function( event ) {
+            var code = event.keyCode ? event.keyCode : event.which;
+
+            switch (code) {
+            case jq.ui.keyCode.UP:         // up arrow
+            case jq.ui.keyCode.DOWN:       // down arrow
+                if (event.target === $handle[0]) { break; }
+
+                event.target = $handle[0];
+                $handle.trigger(event);
+                return false;
+            }
+        };
+
+        jq(document)
+        .bind(jq.browser.mozilla ? 'keypress' : 'keydown', this._keydown)
+        .bind('keyup', this._keyup);
+    }
 });
 
 })(jQuery);
