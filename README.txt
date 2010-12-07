@@ -1,6 +1,6 @@
 FlipBook
     by Tim Pease
-    http://pea53.com/jquery-ui.flipbook
+    http://code.pea53.com/jquery-ui.flipbook
 
 == DESCRIPTION:
 
