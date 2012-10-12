@@ -29,10 +29,6 @@
         .ui-fb-speed .ui-slider-handle { height: 9px !important; width: 9px !important; top: -3px !important; margin-left: -6px !important; }
     </style>
 
-    <!-- jQuery UI theme switcher -->
-    <script type="text/javascript" src="http://ui.jquery.com/applications/themeroller/themeswitchertool/"></script>
-    <script type="text/javascript">$(function(){ $('<div style="position: absolute; left: 20px;" />').insertBefore('#flipbook').themeswitcher({height: 150}); });</script>
-
     <!-- FlipBook -->
     <script type="text/javascript" charset="utf-8">
         var globalTemp = [
@@ -70,7 +66,11 @@
         $(function() {
             var $flipbook = $('#flipbook');
             $flipbook.flipbook({
-                images: globalTemp
+                images: globalTemp,
+                wait: 60,
+                animate: true,
+                direction: 'forward',
+                speed: 32
             });
         });
     </script>
