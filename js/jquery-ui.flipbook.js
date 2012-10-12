@@ -6,7 +6,10 @@ jq.widget('ui.flipbook', {
     options: {
         images: [],
         wait: 60,
-        keyboard: true
+        keyboard: true,
+        animate: true,
+        direction: 'forward',
+        speed: 32
     },
 
     _create: function( ) {
@@ -26,7 +29,7 @@ jq.widget('ui.flipbook', {
             '    </div>' +
             '    <div class="ui-fb-speed"></div>' +
             '    <div class="ui-fb-loop ui-fb-buttonset ui-fb-buttonset-single">' +
-            '        <button name="Forward" class="ui-fb-button ui-state-default ui-priority-primary ui-corner-top ui-state-active">Forward</button>' +
+            '        <button name="Forward" class="ui-fb-button ui-state-default ui-priority-primary ui-corner-top">Forward</button>' +
             '        <button name="Reverse" class="ui-fb-button ui-state-default ui-priority-primary">Reverse</button>' +
             '        <button name="Bounce" class="ui-fb-button ui-state-default ui-priority-primary ui-corner-bottom">Bounce</button>' +
             '    </div>' +
@@ -67,7 +70,7 @@ jq.widget('ui.flipbook', {
         jq('.ui-fb-speed', context).slider({
             min: 2,
             max: 40,
-            value: 32,
+            value: o.speed,
             range: 'min',
             change: function(event, ui) { self._delay(ui.value) }
         });
@@ -102,9 +105,13 @@ jq.widget('ui.flipbook', {
         jq('button[name=Reverse]', context).click(function() { self._direction('reverse') });
         jq('button[name=Bounce]', context).click(function() { self._direction('bounce') });
 
+        var direction = o.direction;
+        if (direction !== 'forward' && direction !== 'reverse' && direction !== 'bounce') { direction = 'forward'; }
+        this._direction(direction);
+        jq('button[name='+direction.charAt(0).toUpperCase() + direction.slice(1)+']', context).mousedown();
+
         this._delay(jq('.ui-fb-speed', context).slider('value'));
         this._imageList = [];
-        this.direction = 'forward';
         this._retry = {
             list: [],
             count: 0,
@@ -138,6 +145,13 @@ jq.widget('ui.flipbook', {
             break;
         }
     },
+
+
+    // FIXME: make the loader it's own little function / object inside the looper
+    //
+    // 1 -> the loader will insert images into the image area
+    // 2 -> upon insertion, a notification is sent to the display portion of the looper
+    // 3 -> the display portion might not exist
 
     _load: function() {
         var self = this,
@@ -195,7 +209,7 @@ jq.widget('ui.flipbook', {
             this.element.css('min-width', this.images.outerWidth(true) + jq('.ui-fb-controls', this.element[0]).outerWidth(true));
             this._activate(index);
             jq('.ui-fb-loader', this.element[0]).hide();
-            this.start();
+            if (this.options.animate) { this.start(); }
         }
 
         return this;
