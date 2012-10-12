@@ -1,0 +1,75 @@
+
+/* button styling taken from the Filament Group Lab webiste */
+/* http://www.filamentgroup.com/lab/styling_buttons_and_toolbars_with_the_jquery_ui_css_framework/ */
+.ui-fb-button { outline: 0; margin:0 4px 0 0; padding: .4em 1em; text-decoration:none !important; cursor:pointer; position: relative; text-align: center; zoom: 1; }
+.ui-fb-button .ui-icon { position: absolute; top: 50%; margin-top: -8px; left: 50%; margin-left: -8px; }
+
+a.ui-fb-button { float:left; }
+
+/* remove extra button width in IE */
+button.ui-fb-button { width:auto; overflow:visible; }
+
+.ui-fb-button-icon-left { padding-left: 2.1em; }
+.ui-fb-button-icon-right { padding-right: 2.1em; }
+.ui-fb-button-icon-left .ui-icon { right: auto; left: .2em; margin-left: 0; }
+.ui-fb-button-icon-right .ui-icon { left: auto; right: .2em; margin-left: 0; }
+
+.ui-fb-button-icon-solo { display: block; width: 16px; margin: 0; margin-right: 6px; padding: 6px 8px; text-indent: -9999px; }    /* solo icon buttons must have block properties for the text-indent to work */
+
+.ui-fb-buttonset { float:left; }
+.ui-fb-buttonset .ui-fb-button { float: left; }
+.ui-fb-buttonset-single .ui-fb-button,
+.ui-fb-buttonset-multi .ui-fb-button { margin-right: -1px;}
+
+.ui-fb-toolbar { padding: .5em; margin: 0;  }
+.ui-fb-toolbar .ui-fb-buttonset { margin-right:1.5em; padding-left: 1px; }
+.ui-fb-toolbar .ui-fb-button { font-size: 1em;  }
+
+
+/* begin the flipbook styles */
+.ui-fb {
+    display: inline-block;
+    *float: left;  /* IE7 won't apply inline-block to divs */
+}
+
+.ui-fb-controls {
+    margin: 0; padding: 0.5em 1em; float: left; width: 12em;
+    border-top-width: 0 !important;
+    border-bottom-width: 0 !important;
+    border-left-width: 0 !important;
+    background: none !important;
+}
+.ui-fb-buttons { margin: 0.8em auto; width: 9em; }
+.ui-fb-speed { margin: 0.8em 0; height: 5px; }
+.ui-fb-speed .ui-slider-handle {
+    height: 9px; width: 9px;
+    top: -3px; margin-left: -6px;
+}
+.ui-fb-loop { width: 9em; margin: 0.8em auto; float: none; }
+.ui-fb-loop .ui-fb-button { display: block; float: none; width: 100%; margin: -1px 0 0; }
+.ui-fb-loop .ui-state-hover { z-index: 13; }
+.ui-fb-loop .ui-state-active { z-index: 17; }
+ul.ui-fb-indicators { list-style-type: none; clear: both; margin: 0.8em auto; padding: 0; width: 100%; }
+ul.ui-fb-indicators li { float: left; margin: 0 0.25em 0.5em; padding: 0; width: 2em; text-align: center; cursor: pointer !important; }
+ul.ui-fb-indicators li.ui-fb-not-loaded { cursor: default !important; }
+
+.ui-fb-images {
+    width: 30em; height: 20em;
+    position: relative; float: left;
+    margin-left: -1px; padding: 3px; overflow: hidden;
+    border-top-width: 0 !important;
+    border-bottom-width: 0 !important;
+    border-right-width: 0 !important;
+    background: none !important;
+}
+.ui-fb-images .ui-fb-loader {
+    position:relative; width: 40%; height: 3em; margin: 1em auto; padding: 0.3em 0.8em;
+    text-align: center; line-height: 3em; z-index: 3;
+    font-size: 1.5em; font-weight: bold; text-shadow: 0 1px 0 white;
+}
+.ui-fb-images .ui-fb-loader .ui-widget-overlay { z-index: 1; }
+.ui-fb-images img { position: absolute; top: 3px; left: 3px; display: none; }
+
+.ui-fb-hide-controls .ui-fb-controls { display: none !important; }
+.ui-fb-hide-controls .ui-fb-images { margin: 0 !important; border-width: 0 !important; }
+
